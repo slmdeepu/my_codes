@@ -1,3 +1,0 @@
-unzip packer* -d /usr/local/packer
-
-PATH=$PATH:/usr/local/packer
