@@ -44,3 +44,19 @@ you’re probably missing the python-software-properties package. Install
 it with the command:
 $ sudo apt-get install python-software-properties
  
+For AWS playbooks:
+
+BOTO is required.
+
+esay_install pip
+pip install boto
+
+Adding secret keys and Acess keys:
+1. export AWS_ACCESS_KEY_ID=''
+2. export AWS_SECRET_ACCESS_KEY=''
+
+or /root/.aws/credentials
+[default]
+aws_access_key_id=AKIAJQMIHD6KCDGEFGXA
+aws_secret_access_key=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
+region=us-east-1
