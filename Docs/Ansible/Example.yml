@@ -4,15 +4,15 @@
   tasks:
     - name: Launch instance
       ec2:
-        key_name: Puppet_master_new
+        key_name: <key_pair_name>
         instance_type: t2.micro
-        image: ami-2051294a
+        image: ami-xxxxxxxx
         instance_tags:
           Name: testing_ansible
         wait: yes
-        group: puppet_master
+        group: <security_group_name>
         count: 1
-        vpc_subnet_id: subnet-0e73ec57
+        vpc_subnet_id: subnet-xxxxxxxx
         assign_public_ip: yes
         region: us-east-1
       register: ec2
@@ -23,7 +23,7 @@
       local_action: lineinfile
                     dest="/etc/ansible/hosts"
                     regexp={{ item.private_ip }}
-                    insertafter="[tomcat]" line={{ item.private_ip }}
+                    insertafter="[webserver]" line={{ item.private_ip }}
       with_items: ec2.instances
 #- name: copy files in the new maachines
 #  hosts: webserver
