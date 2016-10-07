@@ -57,6 +57,6 @@ Adding secret keys and Acess keys:
 
 or /root/.aws/credentials
 [default]
-aws_access_key_id=AKIAJQMIHD6KCDGEFGXA
-aws_secret_access_key=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
+aws_access_key_id=Axxxxxxxxxxxxxxx
+aws_secret_access_key=xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 region=us-east-1
