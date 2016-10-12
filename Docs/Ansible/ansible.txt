@@ -1,31 +1,64 @@
 Installation of Ansible:
-For RHEL:
 
-set up EPEL repo:
-yum install epel-release
- yum update
- yum install wget
- wget http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-8.noarch.rpm
- rpm -ivh epel*
- yum install ansible -y
- ansible --version
- ssh-keygen -t rsa -b 4096 -C "ansibletest"
-	-t = type
-	-b = byte
-	-C = comments
- uncomment the line "IdentityFile ~/.ssh/id_rsa	" in the ssh_config file (/etc/ssh/ssh_config
+Prerequisites:
+--------------
+
+	BOTO is required.
+
+	esay_install pip
+	pip install boto
+
+Adding secret keys and Acess keys:
+----------------------------------
+	1. export AWS_ACCESS_KEY_ID=''
+	2. export AWS_SECRET_ACCESS_KEY=''
+
+	or 
+	create credentials file /root/.aws/credentials
+		[default]
+		aws_access_key_id=Axxxxxxxxxxxxxxx
+		aws_secret_access_key=xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+		region=us-east-1
+	change the following in /etc/ssh/sshd_config
+		PermitRootLogin without-password  
+		RSAAuthentication yes
+		PubkeyAuthentication yes
+
+For RHEL:
+---------
+	set up EPEL repo:
+	----------------
+		yum install epel-release
+		yum update
+		yum install wget
+		wget http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-8.noarch.rpm
+		rpm -ivh epel*
+		yum install ansible -y
+		ansible --version
+		ssh-keygen -t rsa -b 4096 -C "ansibletest"
+			-t = type
+			-b = byte
+			-C = comments
+		uncomment the line "IdentityFile ~/.ssh/id_rsa	" in the ssh_config file (/etc/ssh/ssh_config
  
- export AWS_ACCESS_KEY_ID=''
- export AWS_SECRET_ACCESS_KEY=''
- manually copy the created public key (id_rsa.pub) to /root/.ssh/authorized_keys and /home/ec2-user/authorized_keys of the ansible slave machines
+		Export Access and secret access keys:
+			export AWS_ACCESS_KEY_ID=''
+			export AWS_SECRET_ACCESS_KEY=''
+
+		manually copy the created public key (id_rsa.pub) to /root/.ssh/authorized_keys and /home/ec2-user/authorized_keys of the ansible slave machines
  
- add the hosts name in /etc/ansible/hosts
- [web]
- ip-of-the-slave
+		add the hosts name in /etc/ansible/hosts
+			[web]
+			ip-of-the-slave
  
+	Executing the playbook:
+	-----------------------
  
- ansible-playbook -s main.yml
+		ansible-playbook -s main.yml
  
+Tree structure of Ansible playbook:
+-----------------------------------
+
  rolename
  - files
  - handlers
@@ -34,30 +67,20 @@ yum install epel-release
  - tasks
  - vars
 
- For Ubuntu:
+For Ubuntu:
+-----------
  
- $ sudo apt-add-repository -y ppa:ansible/ansible
-$ sudo apt-get update
-$ sudo apt-get install -y ansible
+	sudo apt-add-repository -y ppa:ansible/ansible
+	sudo apt-get update
+	sudo apt-get install -y ansible
 
-If you get an error like “sudo: add-apt-repository: command not found”,
-you’re probably missing the python-software-properties package. Install
-it with the command:
-$ sudo apt-get install python-software-properties
+	(#If you get an error like “sudo: add-apt-repository: command not found”,
+	you’re probably missing the python-software-properties package.#)
+	Install it with the command:
+		$ sudo apt-get install python-software-properties
  
-For AWS playbooks:
+Copy files to remote machines:
+------------------------------
 
-BOTO is required.
-
-esay_install pip
-pip install boto
-
-Adding secret keys and Acess keys:
-1. export AWS_ACCESS_KEY_ID=''
-2. export AWS_SECRET_ACCESS_KEY=''
-
-or /root/.aws/credentials
-[default]
-aws_access_key_id=Axxxxxxxxxxxxxxx
-aws_secret_access_key=xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-region=us-east-1
+	scp -i <your pem key> /home/user/<your public key to be copied> user@IP:~/.ssh/authorized_keys
+	cat <your public key to be copied> | ssh -i <your pem key> user@IP "cat  >>  ~/.ssh/authorized_keys"
